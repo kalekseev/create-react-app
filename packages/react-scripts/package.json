@@ -57,7 +57,12 @@
     "webpack-bundle-tracker": "^0.2.0",
     "webpack-dev-server": "2.7.1",
     "webpack-manifest-plugin": "1.2.1",
-    "whatwg-fetch": "2.0.3"
+    "whatwg-fetch": "2.0.3",
+    "ts-loader": "^2.2.1",
+    "tslint": "^5.2.0",
+    "tslint-loader": "^3.5.3",
+    "tslint-react": "^3.0.0",
+    "typescript": "~2.4.0"
   },
   "devDependencies": {
     "react": "^15.5.4",

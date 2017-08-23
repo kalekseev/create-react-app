@@ -36,11 +36,6 @@ let compiler = webpack(config);
 compiler.run((err, stats) => {
   const messages = formatWebpackMessages(stats.toJson({}, true));
   if (messages.errors.length) {
-    // Only keep the first error. Others are often indicative
-    // of the same problem, but confuse the reader with noise.
-    if (messages.errors.length > 1) {
-      messages.errors.length = 1;
-    }
     console.log(chalk.red('Failed to compile.\n'));
     printBuildError(new Error(messages.errors.join('\n\n')));
     process.exit(1);
