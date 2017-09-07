@@ -142,10 +142,32 @@ const config = {
               eslintPath: require.resolve('eslint'),
               // @remove-on-eject-begin
               baseConfig: {
-                extends: [require.resolve('eslint-config-react-app')],
+                extends: [
+                  require.resolve('eslint-config-react-app'),
+                  require.resolve('eslint-config-airbnb'),
+                  'plugin:flowtype/recommended',
+                ],
               },
               ignore: false,
               useEslintrc: false,
+              envs: [ "browser" ],
+              rules: {
+                "react/jsx-filename-extension": 0,
+                "import/no-extraneous-dependencies": 0,
+                "react/prop-types": 0,
+                "max-len": [1, 110],
+                "import/no-unresolved": 0,
+                "import/extensions": 0,
+                "react/jsx-no-bind": 0,
+                "no-restricted-syntax": 0,  // remove??
+                "no-plusplus": 0,
+                "react/no-multi-comp": 0,
+                "jsx-a11y/no-static-element-interactions": 0,
+                "import/prefer-default-export": 0,  // remove??
+                "react/no-array-index-key": 0, // remove??
+                "no-console": 0,
+                "no-debugger": 0,
+              },
               // @remove-on-eject-end
             },
             loader: require.resolve('eslint-loader'),
