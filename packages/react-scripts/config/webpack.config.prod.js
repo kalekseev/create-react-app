@@ -22,39 +22,47 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
-const cssLoaders = [
-  {
-    loader: require.resolve('typings-for-css-modules-loader'),
-    options: {
-      importLoaders: 1,
-      minimize: true,
-      sourceMap: shouldUseSourceMap,
-      modules: true,
-      namedExport: true,
-      camelCase: true,
+const getCSSLoaders = (opts) => {
+  const options = {
+    importLoaders: 1,
+    namedExport: true,
+    camelCase: true,
+  };
+  if (opts.withModules) {
+    options.modules = true;
+  }
+  const loaders = [
+    require.resolve('style-loader'),
+    {
+      loader: require.resolve('typings-for-css-modules-loader'),
+      options,
     },
-  },
-  {
-    loader: require.resolve('postcss-loader'),
-    options: {
-      // Necessary for external CSS imports to work
-      // https://github.com/facebookincubator/create-react-app/issues/2677
-      ident: 'postcss',
-      plugins: () => [
-        require('postcss-flexbugs-fixes'),
-        autoprefixer({
-          browsers: [
-            '>1%',
-            'last 4 versions',
-            'Firefox ESR',
-            'not ie < 9', // React doesn't support IE8 anyway
-          ],
-          flexbox: 'no-2009',
-        }),
-      ],
+    {
+      loader: require.resolve('postcss-loader'),
+      options: {
+        // Necessary for external CSS imports to work
+        // https://github.com/facebookincubator/create-react-app/issues/2677
+        ident: 'postcss',
+        plugins: () => [
+          require('postcss-flexbugs-fixes'),
+          autoprefixer({
+            browsers: [
+              '>1%',
+              'last 4 versions',
+              'Firefox ESR',
+              'not ie < 9', // React doesn't support IE8 anyway
+            ],
+            flexbox: 'no-2009',
+          }),
+        ],
+      },
     },
-  },
-];
+  ];
+  if (opts.withSass) {
+    return loaders.concat(require.resolve('sass-loader'));
+  }
+  return loaders;
+}
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -220,12 +228,12 @@ module.exports = {
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
           {
-            test: /\.css$/,
+            test: /^((?!\.local).)*\.s?css$/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
                   fallback: require.resolve('style-loader'),
-                  use: cssLoaders,
+                  use: getCSSLoaders({ withModules: false, withSass: true }),
                 },
                 extractTextPluginOptions
               )
@@ -233,12 +241,12 @@ module.exports = {
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
           },
           {
-            test: /\.scss$/,
+            test: /\.local\.s?css$/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
                   fallback: require.resolve('style-loader'),
-                  use: cssLoaders.concat(require.resolve('sass-loader')),
+                  use: getCSSLoaders({ withModules: true, withSass: true }),
                 },
                 extractTextPluginOptions
               )
