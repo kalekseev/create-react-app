@@ -32,7 +32,6 @@ const getCSSLoaders = (opts) => {
     options.modules = true;
   }
   const loaders = [
-    require.resolve('style-loader'),
     {
       loader: require.resolve('typings-for-css-modules-loader'),
       options,
