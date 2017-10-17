@@ -25,6 +25,7 @@ const getCSSLoaders = (opts) => {
     importLoaders: 1,
     namedExport: true,
     camelCase: true,
+    sourceMap: true,
   };
   if (opts.withModules) {
     options.modules = true;
@@ -53,11 +54,17 @@ const getCSSLoaders = (opts) => {
             flexbox: 'no-2009',
           }),
         ],
+        sourceMap: true,
       },
     },
   ];
   if (opts.withSass) {
-    return loaders.concat(require.resolve('sass-loader'));
+    return loaders.concat({
+      loader: require.resolve('sass-loader'),
+      options: {
+        sourceMap: true
+      }
+    });
   }
   return loaders;
 }
@@ -279,7 +286,7 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.WatchIgnorePlugin([/css\.d\.ts$/]),
+    new webpack.WatchIgnorePlugin([/css\.d\.ts$/, /scss\.d\.ts$/]),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
