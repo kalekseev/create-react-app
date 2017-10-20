@@ -32,6 +32,7 @@ const getCSSLoaders = (opts) => {
   };
   if (opts.withModules) {
     options.modules = true;
+    options.localIdentName = '[folder]__[local]___[hash:base64:5]';
   }
   const loaders = [
     {
