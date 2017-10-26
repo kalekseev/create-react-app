@@ -123,3 +123,13 @@ if (
   };
 }
 // @remove-on-eject-end
+//
+
+try {
+  const paths = require(resolveApp('frontend/config/paths.js'));
+  module.exports = paths;
+} catch(e) {
+  if (e.code !== 'MODULE_NOT_FOUND') {
+    throw e;
+  }
+}
