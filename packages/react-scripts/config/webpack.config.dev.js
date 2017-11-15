@@ -33,7 +33,7 @@ const getCSSLoaders = opts => {
     options.modules = true;
     options.localIdentName = '[folder]__[local]___[hash:base64:5]';
   }
-  const loaders = [
+  return [
     require.resolve('style-loader'),
     {
       loader: require.resolve('typings-for-css-modules-loader'),
@@ -60,16 +60,13 @@ const getCSSLoaders = opts => {
         sourceMap: true,
       },
     },
-  ];
-  if (opts.withSass) {
-    return loaders.concat({
+    {
       loader: require.resolve('sass-loader'),
       options: {
         sourceMap: true,
       },
-    });
-  }
-  return loaders;
+    },
+  ];
 };
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -228,12 +225,12 @@ module.exports = {
           // In production, we use a plugin to extract that CSS to a file, but
           // in development "style" loader enables hot editing of CSS.
           {
-            test: /^((?!\.local).)*\.s?css$/,
-            use: getCSSLoaders({ withModules: false, withSass: true }),
+            test: /^((?!\.local).)*\.scss$/,
+            use: getCSSLoaders({ withModules: false }),
           },
           {
-            test: /\.local\.s?css$/,
-            use: getCSSLoaders({ withModules: true, withSass: true }),
+            test: /\.local\.scss$/,
+            use: getCSSLoaders({ withModules: true }),
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.

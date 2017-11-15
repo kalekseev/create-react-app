@@ -34,7 +34,7 @@ const getCSSLoaders = opts => {
     options.modules = true;
     options.localIdentName = '[folder]__[local]___[hash:base64:5]';
   }
-  const loaders = [
+  return [
     {
       loader: require.resolve('typings-for-css-modules-loader'),
       options,
@@ -59,11 +59,10 @@ const getCSSLoaders = opts => {
         ],
       },
     },
+    {
+      loader: require.resolve('sass-loader'),
+    },
   ];
-  if (opts.withSass) {
-    return loaders.concat(require.resolve('sass-loader'));
-  }
-  return loaders;
 };
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -230,12 +229,12 @@ module.exports = {
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
           {
-            test: /^((?!\.local).)*\.s?css$/,
+            test: /^((?!\.local).)*\.scss$/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
                   fallback: require.resolve('style-loader'),
-                  use: getCSSLoaders({ withModules: false, withSass: true }),
+                  use: getCSSLoaders({ withModules: false }),
                 },
                 extractTextPluginOptions
               )
@@ -243,12 +242,12 @@ module.exports = {
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
           },
           {
-            test: /\.local\.s?css$/,
+            test: /\.local\.scss$/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
                   fallback: require.resolve('style-loader'),
-                  use: getCSSLoaders({ withModules: true, withSass: true }),
+                  use: getCSSLoaders({ withModules: true }),
                 },
                 extractTextPluginOptions
               )
@@ -329,6 +328,7 @@ module.exports = {
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
     new ExtractTextPlugin({
       filename: cssFilename,
+      allChunks: true,
     }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
