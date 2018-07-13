@@ -120,7 +120,7 @@ if (
 // @remove-on-eject-end
 
 try {
-  const paths = require('frontend/config/paths.js');
+  const paths = require(resolveApp('frontend/config/paths.js'));
   module.exports = paths;
 } catch(e) {
   if (e.code !== 'MODULE_NOT_FOUND') {
