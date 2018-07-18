@@ -149,7 +149,7 @@ const config = {
                 ],
               },
               ignore: false,
-              useEslintrc: false,
+              useEslintrc: true,
               envs: [ "browser" ],
               rules: {
                 "react/jsx-filename-extension": 0,
